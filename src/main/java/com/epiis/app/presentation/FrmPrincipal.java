@@ -4,8 +4,6 @@
  */
 package com.epiis.app.presentation;
 
-import com.epiis.app.presentation.person.FrmPersonGetAll;
-import com.epiis.app.presentation.person.FrmPersonInsert;
 import javax.swing.JFrame;
 
 /**
