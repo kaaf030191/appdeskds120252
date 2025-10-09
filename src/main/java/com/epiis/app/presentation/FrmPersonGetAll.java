@@ -4,17 +4,57 @@
  */
 package com.epiis.app.presentation;
 
+import com.epiis.app.business.BusinessPerson;
+import com.epiis.app.dto.DtoPerson;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author KAAF0
  */
 public class FrmPersonGetAll extends javax.swing.JInternalFrame {
 
+    private BusinessPerson businessPerson = null;
+    private final DefaultTableModel dtmTablePerson = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
     /**
      * Creates new form FrmPersonGetAll
      */
     public FrmPersonGetAll() {
         initComponents();
+        this.init();
+    }
+
+    private void init() {
+        try {
+            this.businessPerson = new BusinessPerson();
+
+            List<DtoPerson> listDtoPerson = this.businessPerson.getAll();
+
+            this.tablePerson.setModel(dtmTablePerson);
+
+            this.dtmTablePerson.addColumn("Nombre completo");
+            this.dtmTablePerson.addColumn("Género");
+            this.dtmTablePerson.addColumn("Fecha de nacimiento");
+            this.dtmTablePerson.addColumn("Fecha de registro");
+
+            for (DtoPerson item : listDtoPerson) {
+                this.dtmTablePerson.addRow(new Object[]{
+                    item.getFirstName() + " " + item.getSurName(),
+                    item.isGender() ? "Masculino" : "Femenino",
+                    item.getBirthDate(),
+                    item.getCreatedAt()
+                });
+            }
+        } catch (SQLException ex) {
+        }
     }
 
     /**

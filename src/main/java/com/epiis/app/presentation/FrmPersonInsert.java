@@ -4,17 +4,30 @@
  */
 package com.epiis.app.presentation;
 
+import com.epiis.app.business.BusinessPerson;
+import java.awt.HeadlessException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author KAAF0
  */
 public class FrmPersonInsert extends javax.swing.JInternalFrame {
 
+    public BusinessPerson businessPerson = null;
+
     /**
      * Creates new form FrmPersonInsert
      */
     public FrmPersonInsert() {
         initComponents();
+        this.init();
+    }
+
+    private void init() {
+        this.businessPerson = new BusinessPerson();
     }
 
     /**
@@ -26,6 +39,7 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        bgGender = new javax.swing.ButtonGroup();
         lblFirstName = new javax.swing.JLabel();
         lblSurName = new javax.swing.JLabel();
         lblGender = new javax.swing.JLabel();
@@ -51,11 +65,18 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
 
         lblBirthDate.setText("Fecha de nacimiento");
 
+        bgGender.add(radioMale);
         radioMale.setText("Masculino");
 
+        bgGender.add(radioFemale);
         radioFemale.setText("Femenino");
 
         btnSave.setText("Registrar datos");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         btnClose.setText("Cerrar ventana");
 
@@ -122,8 +143,25 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        try {
+            String firstName = txtFirstName.getText();
+            String surName = txtSurName.getText();
+            boolean gender = radioMale.isSelected();
+            String birthDate = dateBirthDate.getText();
+
+            if (this.businessPerson.insert(firstName, surName, gender, birthDate)) {
+                JOptionPane.showMessageDialog(this, "Operación realizada correctamente.", "Correcto!", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo insertar datos, algo salió mal.", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (HeadlessException | ParseException | SQLException ex) {
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup bgGender;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSave;
     private javax.swing.JTextField dateBirthDate;
