@@ -9,6 +9,8 @@ import java.awt.HeadlessException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import javax.swing.JOptionPane;
+import java.util.Date;
+import javax.swing.JTextField;
 
 /**
  *
@@ -46,12 +48,12 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
         lblBirthDate = new javax.swing.JLabel();
         txtFirstName = new javax.swing.JTextField();
         txtSurName = new javax.swing.JTextField();
-        dateBirthDate = new javax.swing.JTextField();
         radioMale = new javax.swing.JRadioButton();
         radioFemale = new javax.swing.JRadioButton();
         jSeparator1 = new javax.swing.JSeparator();
         btnSave = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
+        dateBirthDate = new com.toedter.calendar.JDateChooser();
 
         setClosable(true);
         setIconifiable(true);
@@ -66,6 +68,7 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
         lblBirthDate.setText("Fecha de nacimiento");
 
         bgGender.add(radioMale);
+        radioMale.setSelected(true);
         radioMale.setText("Masculino");
 
         bgGender.add(radioFemale);
@@ -104,11 +107,10 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(radioFemale)))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblBirthDate, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 2, Short.MAX_VALUE))
-                            .addComponent(dateBirthDate)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblBirthDate, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                            .addComponent(dateBirthDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 2, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -125,12 +127,13 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
                     .addComponent(lblGender)
                     .addComponent(lblBirthDate))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSurName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dateBirthDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(radioMale)
-                    .addComponent(radioFemale))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSurName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(radioMale)
+                        .addComponent(radioFemale))
+                    .addComponent(dateBirthDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -148,14 +151,18 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
             String firstName = txtFirstName.getText();
             String surName = txtSurName.getText();
             boolean gender = radioMale.isSelected();
-            String birthDate = dateBirthDate.getText();
+            Date birthDate = dateBirthDate.getDate();
 
             if (this.businessPerson.insert(firstName, surName, gender, birthDate)) {
                 JOptionPane.showMessageDialog(this, "Operación realizada correctamente.", "Correcto!", JOptionPane.INFORMATION_MESSAGE);
+                
+                txtFirstName.setText(null);
+                txtSurName.setText(null);
+                dateBirthDate.setDate(null);
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo insertar datos, algo salió mal.", "Error!", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (HeadlessException | ParseException | SQLException ex) {
+        } catch (HeadlessException | ParseException | SQLException e) {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -164,7 +171,7 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
     private javax.swing.ButtonGroup bgGender;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSave;
-    private javax.swing.JTextField dateBirthDate;
+    private com.toedter.calendar.JDateChooser dateBirthDate;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblBirthDate;
     private javax.swing.JLabel lblFirstName;

@@ -26,19 +26,21 @@ public class BusinessPerson {
         this.dtoPerson = new DtoPerson();
     }
 
-    public boolean insert(String firstName, String surName, boolean gender, String birthDate) throws ParseException, SQLException {
+    public boolean insert(String firstName, String surName, boolean gender, Date birthDate) throws ParseException, SQLException {
         RepoPerson repoPerson = new QPerson();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        if(firstName.isBlank() || surName.isBlank() || birthDate == null) {
+            return false;
+        }
 
         this.dtoPerson.setIdPerson(UUID.randomUUID().toString());
         this.dtoPerson.setCreatedAt(new Date());
-        this.dtoPerson.setUpdatedAt(new Date());
+        this.dtoPerson.setUpdatedAt(this.dtoPerson.getCreatedAt());
 
         this.dtoPerson.setFirstName(firstName);
         this.dtoPerson.setSurName(surName);
         this.dtoPerson.setGender(gender);
-        this.dtoPerson.setBirthDate(sdf.parse(birthDate));
+        this.dtoPerson.setBirthDate(birthDate);
 
         return repoPerson.insert(dtoPerson) > 0;
     }
