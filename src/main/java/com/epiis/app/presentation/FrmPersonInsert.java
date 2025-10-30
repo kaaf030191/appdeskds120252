@@ -159,6 +159,10 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
             dateBirthDate.setDate(null);
         } else {
             JOptionPane.showMessageDialog(this, mo.listMessage.get(0), "Error!", JOptionPane.ERROR_MESSAGE);
+            
+//            for(String item: mo.listMessage) {
+//                JOptionPane.showMessageDialog(this, item, "Error!", JOptionPane.ERROR_MESSAGE);
+//            }
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 

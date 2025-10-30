@@ -32,8 +32,20 @@ public class BusinessPerson {
             
             RepoPerson repoPerson = new QPerson();
 
-            if(firstName.isBlank() || surName.isBlank() || birthDate == null) {
-                this.mo.listMessage.add("Complete todos los datos faltantes.");
+            if(firstName.isBlank()) {
+                this.mo.listMessage.add("El campo \"Nombre\" es obligatorio.");
+            }
+            
+            if(surName.isBlank()) {
+                this.mo.listMessage.add("El campo \"Apellido\" es obligatorio.");
+            }
+            
+            if(birthDate == null) {
+                this.mo.listMessage.add("El campo \"Fecha de nacimiento\" es obligatorio.");
+            }
+            
+            if(!this.mo.listMessage.isEmpty()) {
+                this.mo.listMessage.add(0, "Corrije la información requerida.");
                 
                 return this.mo;
             }
