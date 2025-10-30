@@ -5,11 +5,10 @@
 package com.epiis.app.business;
 
 import com.epiis.app.dataaccess.query.QPerson;
+import com.epiis.app.dto.DtoMessageObject;
 import com.epiis.app.dto.DtoPerson;
 import com.epiis.app.repository.RepoPerson;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -20,29 +19,46 @@ import java.util.UUID;
  */
 public class BusinessPerson {
 
+    DtoMessageObject mo = null;
     DtoPerson dtoPerson = null;
 
     public BusinessPerson() {
         this.dtoPerson = new DtoPerson();
     }
 
-    public boolean insert(String firstName, String surName, boolean gender, Date birthDate) throws ParseException, SQLException {
-        RepoPerson repoPerson = new QPerson();
-        
-        if(firstName.isBlank() || surName.isBlank() || birthDate == null) {
-            return false;
+    public DtoMessageObject insert(String firstName, String surName, boolean gender, Date birthDate) {
+        try {
+            this.mo = new DtoMessageObject();
+            
+            RepoPerson repoPerson = new QPerson();
+
+            if(firstName.isBlank() || surName.isBlank() || birthDate == null) {
+                this.mo.listMessage.add("Complete todos los datos faltantes.");
+                
+                return this.mo;
+            }
+
+            this.dtoPerson.setIdPerson(UUID.randomUUID().toString());
+            this.dtoPerson.setCreatedAt(new Date());
+            this.dtoPerson.setUpdatedAt(this.dtoPerson.getCreatedAt());
+
+            this.dtoPerson.setFirstName(firstName);
+            this.dtoPerson.setSurName(surName);
+            this.dtoPerson.setGender(gender);
+            this.dtoPerson.setBirthDate(birthDate);
+            
+            repoPerson.insert(dtoPerson);
+
+            this.mo.success();
+            this.mo.listMessage.add("Operación realizada correctamente.");
+        } catch (SQLException ex) {
+            this.mo.exception();
+            
+            this.mo.listMessage.add("Algo salio mal, estamos trabajando para solucionarlo, agradecemos supaciencia.");
+            this.mo.listMessage.add(ex.getMessage());
         }
-
-        this.dtoPerson.setIdPerson(UUID.randomUUID().toString());
-        this.dtoPerson.setCreatedAt(new Date());
-        this.dtoPerson.setUpdatedAt(this.dtoPerson.getCreatedAt());
-
-        this.dtoPerson.setFirstName(firstName);
-        this.dtoPerson.setSurName(surName);
-        this.dtoPerson.setGender(gender);
-        this.dtoPerson.setBirthDate(birthDate);
-
-        return repoPerson.insert(dtoPerson) > 0;
+        
+        return this.mo;
     }
 
     public List<DtoPerson> getAll() throws SQLException {

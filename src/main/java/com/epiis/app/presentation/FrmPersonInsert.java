@@ -5,12 +5,9 @@
 package com.epiis.app.presentation;
 
 import com.epiis.app.business.BusinessPerson;
-import java.awt.HeadlessException;
-import java.sql.SQLException;
-import java.text.ParseException;
+import com.epiis.app.dto.DtoMessageObject;
 import javax.swing.JOptionPane;
 import java.util.Date;
-import javax.swing.JTextField;
 
 /**
  *
@@ -147,22 +144,21 @@ public class FrmPersonInsert extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        try {
-            String firstName = txtFirstName.getText();
-            String surName = txtSurName.getText();
-            boolean gender = radioMale.isSelected();
-            Date birthDate = dateBirthDate.getDate();
+        String firstName = txtFirstName.getText();
+        String surName = txtSurName.getText();
+        boolean gender = radioMale.isSelected();
+        Date birthDate = dateBirthDate.getDate();
+        
+        DtoMessageObject mo = this.businessPerson.insert(firstName, surName, gender, birthDate);
 
-            if (this.businessPerson.insert(firstName, surName, gender, birthDate)) {
-                JOptionPane.showMessageDialog(this, "Operación realizada correctamente.", "Correcto!", JOptionPane.INFORMATION_MESSAGE);
-                
-                txtFirstName.setText(null);
-                txtSurName.setText(null);
-                dateBirthDate.setDate(null);
-            } else {
-                JOptionPane.showMessageDialog(this, "No se pudo insertar datos, algo salió mal.", "Error!", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (HeadlessException | ParseException | SQLException e) {
+        if (mo.getType().equals("success")) {
+            JOptionPane.showMessageDialog(this, mo.listMessage.get(0), "Correcto!", JOptionPane.INFORMATION_MESSAGE);
+
+            txtFirstName.setText(null);
+            txtSurName.setText(null);
+            dateBirthDate.setDate(null);
+        } else {
+            JOptionPane.showMessageDialog(this, mo.listMessage.get(0), "Error!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
